@@ -60,3 +60,15 @@ npm run test:e2e
 
 Treat Tenet-local `listen EPERM` for this port as an execution-environment
 mismatch for this run, not as proof that the app's Playwright test suite fails.
+
+Traditional bug-report details and current evidence classification are recorded
+in:
+
+```text
+.tenet/runs/issue-2-attempt-001/proof/tenet-interaction-e2e-listener-bug.md
+```
+
+For this tracer run, Playwright evidence is marked as external controller
+evidence: direct shell execution of `npm run build`, `npm test`, and
+`npm run test:e2e` passed, while Tenet-native interaction proof remains blocked
+by the local listener permission error.
