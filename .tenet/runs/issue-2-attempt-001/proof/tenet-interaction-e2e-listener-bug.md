@@ -112,7 +112,7 @@ Host-shell result:
 Codex-sandbox result:
 
 - `curl -I --max-time 5 http://100.114.175.52:5173/` returned `HTTP/1.1 200 OK`.
-- `E2E_BASE_URL=http://100.114.175.52:5173 npm run test:e2e` still failed.
+- With Codex `workspace-write` sandbox, `E2E_BASE_URL=http://100.114.175.52:5173 npm run test:e2e` still failed.
 - The failure changed from local listener binding to Chromium launch:
 
 ```text
@@ -120,7 +120,19 @@ FATAL:base/apple/mach_port_rendezvous_mac.cc:159
 bootstrap_check_in org.chromium.Chromium.MachPortRendezvousServer... Permission denied (1100)
 ```
 
-This means the remote preview URL does solve the local listener part of the problem, but it does not make Codex/Tenet-native browser proof reliable on this macOS sandbox. The remaining blocker is browser-process launch permissions.
+Codex unsandboxed result:
+
+- With Codex `--sandbox danger-full-access`, the same command passed against the live Tailscale preview URL:
+
+```bash
+codex exec --cd /Users/jmath/Documents/code/skinet-test-tracer \
+  --sandbox danger-full-access \
+  "Run exactly: E2E_BASE_URL=http://100.114.175.52:5173 npm run test:e2e."
+```
+
+- Result: 5 Playwright tests passed.
+
+This means the remote preview URL solves the local listener part of the problem, and Codex can run browser proof when its command sandbox is relaxed. The blocker is the default Codex `workspace-write` sandbox on macOS, which prevents Chromium from completing its Mach service registration.
 
 ## Revised Capability Classification
 
@@ -130,7 +142,8 @@ For this environment, classify the Tenet/Codex interaction proof capability as:
 interaction_e2e_capability:
   can_reach_remote_preview_url: true
   can_bind_local_preview_server: false
-  can_launch_playwright_chromium: false
-  tenet_native_interaction_e2e_reliable: false
-  recommended_controller_strategy: external_preview_and_external_browser_proof
+  can_launch_playwright_chromium_in_workspace_write_sandbox: false
+  can_launch_playwright_chromium_in_danger_full_access: true
+  tenet_native_interaction_e2e_reliable_with_default_sandbox: false
+  recommended_controller_strategy: external_preview_url_plus_browser_capable_execution_mode
 ```
