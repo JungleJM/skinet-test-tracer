@@ -132,7 +132,13 @@ codex exec --cd /Users/jmath/Documents/code/skinet-test-tracer \
 
 - Result: 5 Playwright tests passed.
 
-This means the remote preview URL solves the local listener part of the problem, and Codex can run browser proof when its command sandbox is relaxed. The blocker is the default Codex `workspace-write` sandbox on macOS, which prevents Chromium from completing its Mach service registration.
+Localhost retest:
+
+- A preview server started outside Codex on `http://127.0.0.1:5173`.
+- With Codex `--sandbox danger-full-access`, `E2E_BASE_URL=http://127.0.0.1:5173 npm run test:e2e` passed all 5 Playwright tests.
+- With Codex `--sandbox danger-full-access`, the normal command `npm run test:e2e` also passed all 5 Playwright tests, including Playwright's own local web server startup.
+
+This means the remote preview URL solves the local listener part of the problem for restricted consumers, but it is not required when Codex is allowed to run the browser proof in `danger-full-access`. The blocker is the default Codex `workspace-write` sandbox on macOS, which prevents local listener binding and Chromium Mach service registration.
 
 ## Revised Capability Classification
 
@@ -141,9 +147,23 @@ For this environment, classify the Tenet/Codex interaction proof capability as:
 ```yaml
 interaction_e2e_capability:
   can_reach_remote_preview_url: true
-  can_bind_local_preview_server: false
+  can_bind_local_preview_server_in_workspace_write_sandbox: false
+  can_bind_local_preview_server_in_danger_full_access: true
   can_launch_playwright_chromium_in_workspace_write_sandbox: false
   can_launch_playwright_chromium_in_danger_full_access: true
   tenet_native_interaction_e2e_reliable_with_default_sandbox: false
-  recommended_controller_strategy: external_preview_url_plus_browser_capable_execution_mode
+  recommended_controller_strategy: browser_capable_proof_runner_with_preview_url_adapter
 ```
+
+## Security and Portability Notes
+
+The current working path requires temporarily relaxing the Codex command sandbox for browser proof on macOS. That is acceptable for this spike, but it should not become a hard-coded assumption in SkiNet.
+
+Future abstractions to add:
+
+- `ProofRunner` adapter: owns how Playwright is executed and what sandbox/security mode is required.
+- `PreviewProvider` adapter: owns whether the app is exposed on localhost, a Tailscale URL, a deployment preview URL, or another remote address.
+- Capability checks: record whether a runner can bind localhost, can reach a remote preview URL, and can launch a browser.
+- Policy gate: require explicit authorization before a proof runner uses an unsandboxed or elevated mode.
+
+Tailscale is useful for this operator's environment and for future headless-machine workflows. It must remain an adapter option, not a core harness dependency. If Tailscale is unavailable, the harness should be able to fall back to localhost, a LAN URL, a CI preview deployment, or another configured preview provider.
