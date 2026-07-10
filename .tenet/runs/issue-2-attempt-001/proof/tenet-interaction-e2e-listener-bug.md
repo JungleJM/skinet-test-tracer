@@ -91,3 +91,46 @@ interaction_e2e:
 Until Tenet's critic execution environment can bind a local web server and launch browser proof reliably, SkiNet should not treat Tenet-native interaction E2E as a dependable provider capability.
 
 For web UI tracers, the controller may still gather E2E evidence outside Tenet by running the deterministic proof commands directly in the repository environment. That evidence should be labeled external controller evidence, not Tenet-native interaction proof.
+
+## Remote Preview Experiment
+
+After the initial failure, the app's Playwright configuration was updated to support an externally supplied preview URL:
+
+```bash
+E2E_BASE_URL=http://100.114.175.52:5173 npm run test:e2e
+```
+
+When `E2E_BASE_URL` is set, Playwright skips its local `webServer` startup and uses the supplied base URL. This models the intended SkiNet production shape: the controller starts or deploys a preview environment, then proof tools consume that URL.
+
+Host-shell result:
+
+- Vite was started outside Tenet with `npm run dev -- --host 0.0.0.0`.
+- Vite advertised `http://100.114.175.52:5173/` as a Tailscale network URL.
+- `curl -I --max-time 5 http://100.114.175.52:5173/` returned `HTTP/1.1 200 OK`.
+- `E2E_BASE_URL=http://100.114.175.52:5173 npm run test:e2e` passed all 5 Playwright tests.
+
+Codex-sandbox result:
+
+- `curl -I --max-time 5 http://100.114.175.52:5173/` returned `HTTP/1.1 200 OK`.
+- `E2E_BASE_URL=http://100.114.175.52:5173 npm run test:e2e` still failed.
+- The failure changed from local listener binding to Chromium launch:
+
+```text
+FATAL:base/apple/mach_port_rendezvous_mac.cc:159
+bootstrap_check_in org.chromium.Chromium.MachPortRendezvousServer... Permission denied (1100)
+```
+
+This means the remote preview URL does solve the local listener part of the problem, but it does not make Codex/Tenet-native browser proof reliable on this macOS sandbox. The remaining blocker is browser-process launch permissions.
+
+## Revised Capability Classification
+
+For this environment, classify the Tenet/Codex interaction proof capability as:
+
+```yaml
+interaction_e2e_capability:
+  can_reach_remote_preview_url: true
+  can_bind_local_preview_server: false
+  can_launch_playwright_chromium: false
+  tenet_native_interaction_e2e_reliable: false
+  recommended_controller_strategy: external_preview_and_external_browser_proof
+```
