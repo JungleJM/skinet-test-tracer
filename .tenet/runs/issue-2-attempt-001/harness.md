@@ -47,3 +47,16 @@ Tracer work may add feature code, fixture data, and feature tests. It must not r
 - If requirements are insufficient, contradictory, or conflict with project doctrine, stop and report `scope_conflict`.
 - If required commands cannot run because the baseline harness is broken, stop and report `harness_bug`.
 - If implementation requires a live Vikunja service or secret to satisfy this tracer, stop and report `scope_conflict`.
+
+## Evidence Environment Note
+
+During this manual adapter spike, Tenet worker and critic subprocesses could not
+bind Vite to `127.0.0.1:5173` and reported `listen EPERM`. The same committed
+test command passes from the normal shell in this repository:
+
+```bash
+npm run test:e2e
+```
+
+Treat Tenet-local `listen EPERM` for this port as an execution-environment
+mismatch for this run, not as proof that the app's Playwright test suite fails.

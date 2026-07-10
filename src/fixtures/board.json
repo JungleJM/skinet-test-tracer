@@ -1,0 +1,50 @@
+{
+  "project": {
+    "id": "skinet-launch",
+    "title": "SkiNet Launch Board"
+  },
+  "columns": [
+    {
+      "id": "todo",
+      "title": "To do",
+      "cards": [
+        {
+          "id": "write-brief",
+          "title": "Write fixture board brief",
+          "description": "Capture the first-pass tasks needed for a read-only Kanban shell.",
+          "assignee": "Maya",
+          "dueDate": "2026-07-17"
+        },
+        {
+          "id": "collect-copy",
+          "title": "Collect card copy",
+          "assignee": "Jordan"
+        }
+      ]
+    },
+    {
+      "id": "in-progress",
+      "title": "In progress",
+      "cards": [
+        {
+          "id": "build-shell",
+          "title": "Build board shell",
+          "description": "Render the checked-in fixture as columns and cards.",
+          "assignee": "Priya",
+          "dueDate": "2026-07-20"
+        }
+      ]
+    },
+    {
+      "id": "done",
+      "title": "Done",
+      "cards": [
+        {
+          "id": "baseline-ready",
+          "title": "Commit Vite baseline",
+          "dueDate": "2026-07-09"
+        }
+      ]
+    }
+  ]
+}
