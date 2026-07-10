@@ -4,6 +4,12 @@ Codex created this Vite React TypeScript and Playwright baseline before tracer w
 
 This setup is outside the tracer evidence boundary. Tracer 1 starts after this baseline is committed and pushed.
 
+Baseline commit:
+
+```text
+061dffdad01bdf927cee79c19521752a7f79c26f
+```
+
 Baseline proof:
 
 ```bash
