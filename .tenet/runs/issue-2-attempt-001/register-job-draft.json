@@ -1,0 +1,21 @@
+{
+  "feature": "vikunja-kanban-viewer",
+  "run_slug": "issue-2-attempt-001",
+  "run_path": ".tenet/runs/issue-2-attempt-001",
+  "artifact_paths": {
+    "spec": ".tenet/runs/issue-2-attempt-001/spec.md",
+    "scenarios": ".tenet/runs/issue-2-attempt-001/scenarios.md",
+    "harness": ".tenet/runs/issue-2-attempt-001/harness.md",
+    "decomposition": ".tenet/runs/issue-2-attempt-001/decomposition.md",
+    "interview": null
+  },
+  "jobs": [
+    {
+      "id": "issue-2",
+      "name": "Implement Gitea issue 2",
+      "type": "dev",
+      "depends_on": [],
+      "prompt": "Implement only the frozen execution contract in docs/agent-issues/ISSUE-2.v1.md. Do not expand scope. Do not edit forbidden paths. If the contract is insufficient or conflicts with project doctrine, stop and report scope_conflict."
+    }
+  ]
+}
