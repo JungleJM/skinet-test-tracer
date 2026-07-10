@@ -1,0 +1,64 @@
+[mcp_servers.tenet]
+command = "tenet"
+args = ["serve"]
+
+[mcp_servers.tenet.tools.tenet_init]
+approval_mode = "approve"
+
+[mcp_servers.tenet.tools.tenet_continue]
+approval_mode = "approve"
+
+[mcp_servers.tenet.tools.tenet_compile_context]
+approval_mode = "approve"
+
+[mcp_servers.tenet.tools.tenet_start_job]
+approval_mode = "approve"
+
+[mcp_servers.tenet.tools.tenet_register_jobs]
+approval_mode = "approve"
+
+[mcp_servers.tenet.tools.tenet_job_wait]
+approval_mode = "approve"
+
+[mcp_servers.tenet.tools.tenet_job_result]
+approval_mode = "approve"
+
+[mcp_servers.tenet.tools.tenet_cancel_job]
+approval_mode = "approve"
+
+[mcp_servers.tenet.tools.tenet_start_eval]
+approval_mode = "approve"
+
+[mcp_servers.tenet.tools.tenet_validate_clarity]
+approval_mode = "approve"
+
+[mcp_servers.tenet.tools.tenet_validate_readiness]
+approval_mode = "approve"
+
+[mcp_servers.tenet.tools.tenet_update_knowledge]
+approval_mode = "approve"
+
+[mcp_servers.tenet.tools.tenet_add_steer]
+approval_mode = "approve"
+
+[mcp_servers.tenet.tools.tenet_process_steer]
+approval_mode = "approve"
+
+[mcp_servers.tenet.tools.tenet_update_steer]
+approval_mode = "approve"
+
+[mcp_servers.tenet.tools.tenet_health_check]
+approval_mode = "approve"
+
+[mcp_servers.tenet.tools.tenet_get_status]
+approval_mode = "approve"
+
+[mcp_servers.tenet.tools.tenet_retry_job]
+approval_mode = "approve"
+
+[mcp_servers.tenet.tools.tenet_report_blocking_finding]
+approval_mode = "approve"
+
+
+[projects."/Users/jmath/Documents/code/skinet-test-tracer"]
+trust_level = "trusted"

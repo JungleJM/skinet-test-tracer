@@ -24,3 +24,6 @@ test-results
 *.njsproj
 *.sln
 *.sw?
+
+# Tenet live SQLite runtime state. Do not track this in Git.
+.tenet/.state/
