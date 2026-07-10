@@ -167,3 +167,16 @@ Future abstractions to add:
 - Policy gate: require explicit authorization before a proof runner uses an unsandboxed or elevated mode.
 
 Tailscale is useful for this operator's environment and for future headless-machine workflows. It must remain an adapter option, not a core harness dependency. If Tailscale is unavailable, the harness should be able to fall back to localhost, a LAN URL, a CI preview deployment, or another configured preview provider.
+
+## Probe Before Escalation Rule
+
+`danger-full-access` should not be the default proof mode. It is a fallback for hosts where the safer runner mode cannot perform browser proof.
+
+For each proof-runner host or runner image, the controller should:
+
+1. run a minimal Playwright/browser probe in the safest configured sandbox;
+2. run the actual proof in safe mode if the probe passes;
+3. retry once with an explicitly authorized elevated runner only if safe mode fails with a classified browser-runtime or listener-binding sandbox failure;
+4. store the result by host identity, OS, runner image, Codex/Tenet version, and Playwright browser version.
+
+Linux hosts may not need the macOS-specific elevated proof runner. The harness should discover this through probing and use the safer mode by default whenever it works.
